@@ -1,3 +1,6 @@
 spring:
   application:
     name: anagram-api
+
+freeapi-anagram-provider:
+  base-url: https://anagram.freeapi.me
