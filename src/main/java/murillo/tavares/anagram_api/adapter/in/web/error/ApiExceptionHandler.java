@@ -4,6 +4,8 @@ import murillo.tavares.anagram_api.common.error.ApiException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponseException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -12,6 +14,16 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(ApiException.class)
 	public ResponseEntity<ProblemDetail> handleApiException(ApiException exception) {
+		return ResponseEntity.status(exception.getStatusCode()).body(exception.getBody());
+	}
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<ProblemDetail> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+		return ResponseEntity.status(exception.getStatusCode()).body(exception.getBody());
+	}
+
+	@ExceptionHandler(ErrorResponseException.class)
+	public ResponseEntity<ProblemDetail> handleErrorResponseException(ErrorResponseException exception) {
 		return ResponseEntity.status(exception.getStatusCode()).body(exception.getBody());
 	}
 
