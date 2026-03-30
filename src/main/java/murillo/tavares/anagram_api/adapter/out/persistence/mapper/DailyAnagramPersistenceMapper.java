@@ -1,9 +1,8 @@
 package murillo.tavares.anagram_api.adapter.out.persistence.mapper;
 
 import murillo.tavares.anagram_api.adapter.out.persistence.entity.DailyAnagramEntity;
-import murillo.tavares.anagram_api.adapter.out.persistence.entity.DailyAnagramSolutionEntity;
-import murillo.tavares.anagram_api.domain.model.Anagram;
 import murillo.tavares.anagram_api.domain.model.DailyAnagram;
+import murillo.tavares.anagram_api.domain.model.DailyAnagramSolution;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,8 +15,8 @@ import java.util.List;
 public interface DailyAnagramPersistenceMapper {
 
 	@Mapping(target = "date", source = "puzzleDate")
-	@Mapping(target = "anagram", expression = "java(toAnagram(entity))")
-	@Mapping(target = "foundSolutions", expression = "java(toFoundSolutions(entity))")
+	@Mapping(target = "task", source = "task")
+	@Mapping(target = "solutions", expression = "java(toSolutions(entity))")
 	DailyAnagram toDomain(DailyAnagramEntity entity);
 
 	@Mapping(target = "id", ignore = true)
@@ -28,29 +27,19 @@ public interface DailyAnagramPersistenceMapper {
 
 	@ObjectFactory
 	default DailyAnagramEntity createEntity(DailyAnagram dailyAnagram) {
-		return new DailyAnagramEntity(dailyAnagram.date(), dailyAnagram.anagram().task());
+		return new DailyAnagramEntity(dailyAnagram.date(), dailyAnagram.task());
 	}
 
 	@AfterMapping
 	default void addSolutions(DailyAnagram dailyAnagram, @MappingTarget DailyAnagramEntity entity) {
-		for (String solution : dailyAnagram.anagram().solutions()) {
-			entity.addSolution(solution, dailyAnagram.foundSolutions().contains(solution));
+		for (DailyAnagramSolution solution : dailyAnagram.solutions()) {
+			entity.addSolution(solution.answer(), solution.found());
 		}
 	}
 
-	default Anagram toAnagram(DailyAnagramEntity entity) {
-		return new Anagram(
-				entity.getTask(),
-				entity.getSolutions().stream()
-						.map(DailyAnagramSolutionEntity::getAnswer)
-						.toList()
-		);
-	}
-
-	default List<String> toFoundSolutions(DailyAnagramEntity entity) {
+	default List<DailyAnagramSolution> toSolutions(DailyAnagramEntity entity) {
 		return entity.getSolutions().stream()
-				.filter(DailyAnagramSolutionEntity::isFound)
-				.map(DailyAnagramSolutionEntity::getAnswer)
+				.map(solution -> new DailyAnagramSolution(solution.getAnswer(), solution.isFound()))
 				.toList();
 	}
 }

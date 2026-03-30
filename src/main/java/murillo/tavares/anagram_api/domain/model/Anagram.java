@@ -12,12 +12,4 @@ public record Anagram(
 	public Anagram {
 		solutions = TextUtils.normalizeDistinct(solutions);
 	}
-
-	public int totalSolutionsCount() {
-		return solutions.size();
-	}
-
-	public boolean isValidAnswer(String answer) {
-		return solutions.contains(TextUtils.normalize(answer));
-	}
 }

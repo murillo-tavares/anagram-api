@@ -13,9 +13,6 @@ class AnagramTest {
 		Anagram anagram = new Anagram("psychology", List.of(" Soy ", "SPY", "spy", "copy"));
 
 		assertThat(anagram.solutions()).containsExactly("soy", "spy", "copy");
-		assertThat(anagram.totalSolutionsCount()).isEqualTo(3);
-		assertThat(anagram.isValidAnswer(" Spy ")).isTrue();
-		assertThat(anagram.isValidAnswer("invalid")).isFalse();
 	}
 
 	@Test

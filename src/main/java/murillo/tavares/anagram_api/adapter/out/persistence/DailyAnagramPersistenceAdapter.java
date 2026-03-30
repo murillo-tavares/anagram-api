@@ -6,9 +6,9 @@ import murillo.tavares.anagram_api.adapter.out.persistence.entity.DailyAnagramSo
 import murillo.tavares.anagram_api.adapter.out.persistence.mapper.DailyAnagramPersistenceMapper;
 import murillo.tavares.anagram_api.adapter.out.persistence.repository.DailyAnagramJpaRepository;
 import murillo.tavares.anagram_api.adapter.out.persistence.repository.DailyAnagramSolutionJpaRepository;
-import murillo.tavares.anagram_api.common.text.TextUtils;
 import murillo.tavares.anagram_api.application.port.out.ManageDailyAnagramPort;
 import murillo.tavares.anagram_api.domain.model.DailyAnagram;
+import murillo.tavares.anagram_api.domain.model.DailyAnagramSolution;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -38,7 +38,7 @@ public class DailyAnagramPersistenceAdapter implements ManageDailyAnagramPort {
 	@Override
 	public DailyAnagram markSolutionAsFound(DailyAnagram dailyAnagram, String answer) {
 		DailyAnagramSolutionEntity entity = dailyAnagramSolutionJpaRepository
-				.findByDailyAnagramPuzzleDateAndAnswer(dailyAnagram.date(), TextUtils.normalize(answer))
+				.findByDailyAnagramPuzzleDateAndAnswer(dailyAnagram.date(), DailyAnagramSolution.normalizeAnswer(answer))
 				.orElseThrow(() -> new IllegalStateException("Stored daily anagram solution was not found"));
 
 		entity.markAsFound();
