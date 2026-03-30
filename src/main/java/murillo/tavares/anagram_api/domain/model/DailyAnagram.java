@@ -12,7 +12,10 @@ public record DailyAnagram(
 
 	public DailyAnagram {
 		solutions = solutions.stream()
-				.sorted(Comparator.comparing(DailyAnagramSolution::answer))
+				.sorted(
+						Comparator.comparingInt((DailyAnagramSolution solution) -> solution.answer().length())
+								.thenComparing(DailyAnagramSolution::answer)
+				)
 				.toList();
 	}
 

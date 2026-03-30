@@ -62,10 +62,10 @@ class AnagramControllerTest {
 		mockMvc.perform(get("/api/anagrams/daily"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.task").value("psychology"))
-				.andExpect(jsonPath("$.solutions[0]").value("----"))
-				.andExpect(jsonPath("$.solutions[1]").value("------"))
-				.andExpect(jsonPath("$.solutions[2]").value("soy"))
-				.andExpect(jsonPath("$.solutions[3]").value("---"));
+				.andExpect(jsonPath("$.solutions[0]").value("soy"))
+				.andExpect(jsonPath("$.solutions[1]").value("---"))
+				.andExpect(jsonPath("$.solutions[2]").value("----"))
+				.andExpect(jsonPath("$.solutions[3]").value("------"));
 	}
 
 	@Test
@@ -90,10 +90,10 @@ class AnagramControllerTest {
 								"""))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.task").value("psychology"))
-				.andExpect(jsonPath("$.solutions[0]").value("----"))
-				.andExpect(jsonPath("$.solutions[1]").value("------"))
-				.andExpect(jsonPath("$.solutions[2]").value("soy"))
-				.andExpect(jsonPath("$.solutions[3]").value("spy"));
+				.andExpect(jsonPath("$.solutions[0]").value("soy"))
+				.andExpect(jsonPath("$.solutions[1]").value("spy"))
+				.andExpect(jsonPath("$.solutions[2]").value("----"))
+				.andExpect(jsonPath("$.solutions[3]").value("------"));
 	}
 
 	@Test
@@ -119,10 +119,10 @@ class AnagramControllerTest {
 								"""))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.task").value("psychology"))
-				.andExpect(jsonPath("$.solutions[0]").value("----"))
-				.andExpect(jsonPath("$.solutions[1]").value("------"))
-				.andExpect(jsonPath("$.solutions[2]").value("soy"))
-				.andExpect(jsonPath("$.solutions[3]").value("---"));
+				.andExpect(jsonPath("$.solutions[0]").value("soy"))
+				.andExpect(jsonPath("$.solutions[1]").value("---"))
+				.andExpect(jsonPath("$.solutions[2]").value("----"))
+				.andExpect(jsonPath("$.solutions[3]").value("------"));
 	}
 
 	@Test

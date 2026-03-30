@@ -28,4 +28,22 @@ class AnagramTest {
 		assertThat(dailyAnagram.isNewValidSolution("invalid")).isFalse();
 		assertThat(dailyAnagram.isNewValidSolution(" Spy ")).isTrue();
 	}
+
+	@Test
+	void shouldOrderDailyAnagramSolutionsByLengthAndAlphabetically() {
+		DailyAnagram dailyAnagram = new DailyAnagram(
+				java.time.LocalDate.of(2026, 3, 27),
+				"psychology",
+				List.of(
+						new DailyAnagramSolution("longer", false),
+						new DailyAnagramSolution("copy", false),
+						new DailyAnagramSolution("spy", false),
+						new DailyAnagramSolution("soy", false)
+				)
+		);
+
+		assertThat(dailyAnagram.solutions())
+				.extracting(DailyAnagramSolution::answer)
+				.containsExactly("soy", "spy", "copy", "longer");
+	}
 }
