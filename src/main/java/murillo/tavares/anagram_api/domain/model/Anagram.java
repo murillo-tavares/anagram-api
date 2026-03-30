@@ -5,11 +5,12 @@ import murillo.tavares.anagram_api.common.text.TextUtils;
 import java.util.List;
 
 public record Anagram(
-		String task,
+		String letters,
 		List<String> solutions
 ) {
 
 	public Anagram {
+		letters = TextUtils.normalize(letters);
 		solutions = TextUtils.normalizeDistinct(solutions);
 	}
 }

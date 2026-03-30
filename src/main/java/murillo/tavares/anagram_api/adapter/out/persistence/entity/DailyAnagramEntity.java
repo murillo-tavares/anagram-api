@@ -35,15 +35,15 @@ public class DailyAnagramEntity {
 	private LocalDate puzzleDate;
 
 	@Column(nullable = false)
-	private String task;
+	private String letters;
 
 	@OneToMany(mappedBy = "dailyAnagram", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderBy("answer ASC")
 	private final List<DailyAnagramSolutionEntity> solutions = new ArrayList<>();
 
-	public DailyAnagramEntity(LocalDate puzzleDate, String task) {
+	public DailyAnagramEntity(LocalDate puzzleDate, String letters) {
 		this.puzzleDate = puzzleDate;
-		this.task = task;
+		this.letters = letters;
 	}
 
 	public void addSolution(String answer, boolean found) {

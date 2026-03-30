@@ -15,19 +15,19 @@ import java.util.List;
 public interface DailyAnagramPersistenceMapper {
 
 	@Mapping(target = "date", source = "puzzleDate")
-	@Mapping(target = "task", source = "task")
+	@Mapping(target = "letters", source = "letters")
 	@Mapping(target = "solutions", expression = "java(toSolutions(entity))")
 	DailyAnagram toDomain(DailyAnagramEntity entity);
 
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "puzzleDate", ignore = true)
-	@Mapping(target = "task", ignore = true)
+	@Mapping(target = "letters", ignore = true)
 	@Mapping(target = "solutions", ignore = true)
 	DailyAnagramEntity toEntity(DailyAnagram dailyAnagram);
 
 	@ObjectFactory
 	default DailyAnagramEntity createEntity(DailyAnagram dailyAnagram) {
-		return new DailyAnagramEntity(dailyAnagram.date(), dailyAnagram.task());
+		return new DailyAnagramEntity(dailyAnagram.date(), dailyAnagram.letters());
 	}
 
 	@AfterMapping

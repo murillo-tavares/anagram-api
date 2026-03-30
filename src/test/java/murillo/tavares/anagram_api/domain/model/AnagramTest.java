@@ -9,17 +9,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AnagramTest {
 
 	@Test
-	void shouldNormalizeSolutionsAndValidateAnswers() {
-		Anagram anagram = new Anagram("psychology", List.of(" Soy ", "SPY", "spy", "copy"));
+	void shouldNormalizeLettersAndSolutions() {
+		Anagram anagram = new Anagram(" Scooypyhlg ", List.of(" Soy ", "SPY", "spy", "copy", "psychology"));
 
-		assertThat(anagram.solutions()).containsExactly("soy", "spy", "copy");
+		assertThat(anagram.letters()).isEqualTo("scooypyhlg");
+		assertThat(anagram.solutions()).containsExactly("soy", "spy", "copy", "psychology");
 	}
 
 	@Test
 	void shouldIdentifyWhenAnswerIsNewValidSolutionForDailyAnagram() {
 		DailyAnagram dailyAnagram = new DailyAnagram(
 				java.time.LocalDate.of(2026, 3, 27),
-				new Anagram("psychology", List.of("soy", "spy", "copy")),
+				new Anagram("scooypyhlg", List.of("soy", "spy", "copy", "psychology")),
 				List.of("soy")
 		);
 
@@ -27,13 +28,14 @@ class AnagramTest {
 		assertThat(dailyAnagram.isNewValidSolution("soy")).isFalse();
 		assertThat(dailyAnagram.isNewValidSolution("invalid")).isFalse();
 		assertThat(dailyAnagram.isNewValidSolution(" Spy ")).isTrue();
+		assertThat(dailyAnagram.isNewValidSolution("psychology")).isTrue();
 	}
 
 	@Test
 	void shouldOrderDailyAnagramSolutionsByLengthAndAlphabetically() {
 		DailyAnagram dailyAnagram = new DailyAnagram(
 				java.time.LocalDate.of(2026, 3, 27),
-				"psychology",
+				"scooypyhlg",
 				List.of(
 						new DailyAnagramSolution("longer", false),
 						new DailyAnagramSolution("copy", false),

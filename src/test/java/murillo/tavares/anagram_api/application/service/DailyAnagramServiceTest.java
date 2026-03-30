@@ -42,7 +42,7 @@ class DailyAnagramServiceTest {
 		DailyAnagramService service = new DailyAnagramService(generateAnagramPort, manageDailyAnagramPort);
 		DailyAnagram expected = new DailyAnagram(
 				LocalDate.of(2026, 3, 27),
-				new Anagram("psychology", List.of("soy", "spy", "copy")),
+				new Anagram("scooypyhlg", List.of("soy", "spy", "copy", "psychology")),
 				List.of("soy")
 		);
 
@@ -60,10 +60,10 @@ class DailyAnagramServiceTest {
 		GenerateAnagramPort generateAnagramPort = mock(GenerateAnagramPort.class);
 		ManageDailyAnagramPort manageDailyAnagramPort = mock(ManageDailyAnagramPort.class);
 		DailyAnagramService service = new DailyAnagramService(generateAnagramPort, manageDailyAnagramPort);
-		Anagram generatedAnagram = new Anagram("psychology", List.of("soy", "spy", "copy"));
+		Anagram generatedAnagram = new Anagram("scooypyhlg", List.of("soy", "spy", "copy", "psychology"));
 		DailyAnagram persistedAnagram = new DailyAnagram(
 				LocalDate.of(2026, 3, 27),
-				new Anagram("psychology", List.of("soy", "spy", "copy")),
+				new Anagram("scooypyhlg", List.of("soy", "spy", "copy", "psychology")),
 				List.of()
 		);
 
@@ -71,7 +71,7 @@ class DailyAnagramServiceTest {
 		when(generateAnagramPort.generateAnagram()).thenReturn(generatedAnagram);
 		when(manageDailyAnagramPort.save(new DailyAnagram(
 				LocalDate.of(2026, 3, 27),
-				new Anagram("psychology", List.of("soy", "spy", "copy"))
+				new Anagram("scooypyhlg", List.of("soy", "spy", "copy", "psychology"))
 		))).thenReturn(persistedAnagram);
 
 		DailyAnagram actual = service.getDailyAnagram();
@@ -80,7 +80,7 @@ class DailyAnagramServiceTest {
 		verify(generateAnagramPort).generateAnagram();
 		verify(manageDailyAnagramPort).save(new DailyAnagram(
 				LocalDate.of(2026, 3, 27),
-				new Anagram("psychology", List.of("soy", "spy", "copy"))
+				new Anagram("scooypyhlg", List.of("soy", "spy", "copy", "psychology"))
 		));
 	}
 
@@ -91,12 +91,12 @@ class DailyAnagramServiceTest {
 		DailyAnagramService service = new DailyAnagramService(generateAnagramPort, manageDailyAnagramPort);
 		DailyAnagram existingAnagram = new DailyAnagram(
 				LocalDate.of(2026, 3, 27),
-				new Anagram("psychology", List.of("soy", "spy", "copy")),
+				new Anagram("scooypyhlg", List.of("soy", "spy", "copy", "psychology")),
 				List.of("soy")
 		);
 		DailyAnagram updatedAnagram = new DailyAnagram(
 				LocalDate.of(2026, 3, 27),
-				new Anagram("psychology", List.of("soy", "spy", "copy")),
+				new Anagram("scooypyhlg", List.of("soy", "spy", "copy", "psychology")),
 				List.of("soy", "spy")
 		);
 
@@ -118,7 +118,7 @@ class DailyAnagramServiceTest {
 		DailyAnagramService service = new DailyAnagramService(generateAnagramPort, manageDailyAnagramPort);
 		DailyAnagram existingAnagram = new DailyAnagram(
 				LocalDate.of(2026, 3, 27),
-				new Anagram("psychology", List.of("soy", "spy", "copy")),
+				new Anagram("scooypyhlg", List.of("soy", "spy", "copy", "psychology")),
 				List.of("soy")
 		);
 

@@ -50,34 +50,34 @@ class AnagramControllerTest {
 	void shouldReturnDailyAnagram() throws Exception {
 		when(getDailyAnagramUseCase.getDailyAnagram()).thenReturn(new DailyAnagram(
 				LocalDate.of(2026, 3, 27),
-				"psychology",
+				"scooypyhlg",
 				List.of(
 						new DailyAnagramSolution("soy", true),
 						new DailyAnagramSolution("spy", false),
 						new DailyAnagramSolution("copy", false),
-						new DailyAnagramSolution("longer", false)
+						new DailyAnagramSolution("psychology", false)
 				)
 		));
 
 		mockMvc.perform(get("/api/anagrams/daily"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.task").value("psychology"))
+				.andExpect(jsonPath("$.letters").value("scooypyhlg"))
 				.andExpect(jsonPath("$.solutions[0]").value("soy"))
 				.andExpect(jsonPath("$.solutions[1]").value("---"))
 				.andExpect(jsonPath("$.solutions[2]").value("----"))
-				.andExpect(jsonPath("$.solutions[3]").value("------"));
+				.andExpect(jsonPath("$.solutions[3]").value("----------"));
 	}
 
 	@Test
 	void shouldSubmitValidAnswer() throws Exception {
 		when(submitDailyAnagramAnswerUseCase.submitAnswer("spy")).thenReturn(new DailyAnagram(
 				LocalDate.of(2026, 3, 27),
-				"psychology",
+				"scooypyhlg",
 				List.of(
 						new DailyAnagramSolution("soy", true),
 						new DailyAnagramSolution("spy", true),
 						new DailyAnagramSolution("copy", false),
-						new DailyAnagramSolution("longer", false)
+						new DailyAnagramSolution("psychology", false)
 				)
 		));
 
@@ -89,11 +89,11 @@ class AnagramControllerTest {
 								}
 								"""))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.task").value("psychology"))
+				.andExpect(jsonPath("$.letters").value("scooypyhlg"))
 				.andExpect(jsonPath("$.solutions[0]").value("soy"))
 				.andExpect(jsonPath("$.solutions[1]").value("spy"))
 				.andExpect(jsonPath("$.solutions[2]").value("----"))
-				.andExpect(jsonPath("$.solutions[3]").value("------"));
+				.andExpect(jsonPath("$.solutions[3]").value("----------"));
 	}
 
 	@Test
@@ -101,12 +101,12 @@ class AnagramControllerTest {
 		when(submitDailyAnagramAnswerUseCase.submitAnswer("invalid"))
 				.thenReturn(new DailyAnagram(
 						LocalDate.of(2026, 3, 27),
-						"psychology",
+						"scooypyhlg",
 						List.of(
 								new DailyAnagramSolution("soy", true),
 								new DailyAnagramSolution("spy", false),
 								new DailyAnagramSolution("copy", false),
-								new DailyAnagramSolution("longer", false)
+								new DailyAnagramSolution("psychology", false)
 						)
 				));
 
@@ -118,11 +118,11 @@ class AnagramControllerTest {
 								}
 								"""))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.task").value("psychology"))
+				.andExpect(jsonPath("$.letters").value("scooypyhlg"))
 				.andExpect(jsonPath("$.solutions[0]").value("soy"))
 				.andExpect(jsonPath("$.solutions[1]").value("---"))
 				.andExpect(jsonPath("$.solutions[2]").value("----"))
-				.andExpect(jsonPath("$.solutions[3]").value("------"));
+				.andExpect(jsonPath("$.solutions[3]").value("----------"));
 	}
 
 	@Test

@@ -11,7 +11,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface AnagramWebMapper {
 
-	@Mapping(target = "task", source = "task")
+	@Mapping(target = "letters", source = "letters")
 	@Mapping(target = "solutions", expression = "java(toSolutions(dailyAnagram))")
 	AnagramResponse toResponse(DailyAnagram dailyAnagram);
 
