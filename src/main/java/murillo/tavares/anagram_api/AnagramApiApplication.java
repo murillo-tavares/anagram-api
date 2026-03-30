@@ -9,5 +9,4 @@ public class AnagramApiApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(AnagramApiApplication.class, args);
 	}
-
 }

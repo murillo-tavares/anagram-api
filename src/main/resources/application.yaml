@@ -1,6 +1,17 @@
 spring:
   application:
     name: anagram-api
+  datasource:
+    url: jdbc:h2:file:./data/anagram-db
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  flyway:
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
 
 freeapi-anagram-provider:
   base-url: https://anagram.freeapi.me
