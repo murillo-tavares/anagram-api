@@ -2,7 +2,10 @@ package murillo.tavares.anagram_api.adapter.in.web;
 
 import murillo.tavares.anagram_api.adapter.in.web.error.ApiExceptionHandler;
 import murillo.tavares.anagram_api.adapter.in.web.mapper.AnagramWebMapperImpl;
+import murillo.tavares.anagram_api.adapter.in.web.renderer.AnagramRendererResolver;
+import murillo.tavares.anagram_api.adapter.in.web.renderer.JsonAnagramRenderer;
 import murillo.tavares.anagram_api.adapter.in.web.session.PlayerSessionManager;
+import murillo.tavares.anagram_api.adapter.in.web.renderer.TextAnagramRenderer;
 import murillo.tavares.anagram_api.adapter.out.http.exception.AnagramProviderException;
 import murillo.tavares.anagram_api.application.port.in.GetDailyAnagramUseCase;
 import murillo.tavares.anagram_api.application.port.in.SubmitDailyAnagramAnswerUseCase;
@@ -27,13 +30,21 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = AnagramController.class)
-@Import({AnagramControllerTest.MockConfig.class, ApiExceptionHandler.class, AnagramWebMapperImpl.class})
+@Import({
+		AnagramControllerTest.MockConfig.class,
+		ApiExceptionHandler.class,
+		AnagramWebMapperImpl.class,
+		JsonAnagramRenderer.class,
+		TextAnagramRenderer.class,
+		AnagramRendererResolver.class
+})
 class AnagramControllerTest {
 
 	@Autowired
@@ -82,6 +93,37 @@ class AnagramControllerTest {
 	}
 
 	@Test
+	void shouldReturnDailyAnagramAsPlainText() throws Exception {
+		when(getDailyAnagramUseCase.getDailyAnagram()).thenReturn(new DailyAnagram(
+				LocalDate.of(2026, 3, 27),
+				"scooypyhlg",
+				List.of(
+						new DailyAnagramSolution("soy", true, "ana#0001"),
+						new DailyAnagramSolution("spy", false, null),
+						new DailyAnagramSolution("copy", false, null),
+						new DailyAnagramSolution("psychology", false, null)
+				)
+		));
+
+		String expected = String.join(
+				System.lineSeparator(),
+				"    +---------------------+",
+				"    | S C O O Y P Y H L G |",
+				"    +---------------------+",
+				"",
+				"1. soy         found by ana#0001",
+				"2. ---",
+				"3. ----",
+				"4. ----------"
+		);
+
+		mockMvc.perform(get("/api/anagrams/daily").accept(MediaType.TEXT_PLAIN))
+				.andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
+				.andExpect(content().string(expected));
+	}
+
+	@Test
 	void shouldSubmitValidAnswerWithPlayerSession() throws Exception {
 		MockHttpSession session = new MockHttpSession();
 		when(playerSessionManager.getCurrentPlayer(session)).thenReturn(Optional.of(new PlayerIdentity("murillo", "0001")));
@@ -114,6 +156,47 @@ class AnagramControllerTest {
 				.andExpect(jsonPath("$.solutions[2].foundBy").value(nullValue()))
 				.andExpect(jsonPath("$.solutions[3].value").value("----------"))
 				.andExpect(jsonPath("$.solutions[3].foundBy").value(nullValue()));
+	}
+
+	@Test
+	void shouldSubmitValidAnswerAndReturnPlainText() throws Exception {
+		MockHttpSession session = new MockHttpSession();
+		when(playerSessionManager.getCurrentPlayer(session)).thenReturn(Optional.of(new PlayerIdentity("murillo", "0001")));
+		when(submitDailyAnagramAnswerUseCase.submitAnswer("spy", "murillo#0001")).thenReturn(new DailyAnagram(
+				LocalDate.of(2026, 3, 27),
+				"scooypyhlg",
+				List.of(
+						new DailyAnagramSolution("soy", true, "ana#0001"),
+						new DailyAnagramSolution("spy", true, "murillo#0001"),
+						new DailyAnagramSolution("copy", false, null),
+						new DailyAnagramSolution("psychology", false, null)
+				)
+		));
+
+		String expected = String.join(
+				System.lineSeparator(),
+				"      +---------------------+",
+				"      | S C O O Y P Y H L G |",
+				"      +---------------------+",
+				"",
+				"1. soy         found by ana#0001",
+				"2. spy         found by murillo#0001",
+				"3. ----",
+				"4. ----------"
+		);
+
+		mockMvc.perform(post("/api/anagrams/daily/answers")
+						.session(session)
+						.accept(MediaType.TEXT_PLAIN)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content("""
+								{
+								  "answer": "spy"
+								}
+								"""))
+				.andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_PLAIN))
+				.andExpect(content().string(expected));
 	}
 
 	@Test
