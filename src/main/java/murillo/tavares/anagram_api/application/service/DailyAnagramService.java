@@ -30,11 +30,11 @@ public class DailyAnagramService implements GetDailyAnagramUseCase, SubmitDailyA
 
 	@Override
 	@Transactional
-	public DailyAnagram submitAnswer(String answer) {
+	public DailyAnagram submitAnswer(String answer, String foundBy) {
 		DailyAnagram dailyAnagram = getDailyAnagram();
 
 		if (dailyAnagram.isNewValidSolution(answer)) {
-			return manageDailyAnagramPort.markSolutionAsFound(dailyAnagram, answer);
+			return manageDailyAnagramPort.markSolutionAsFound(dailyAnagram, answer, foundBy);
 		}
 
 		return dailyAnagram;

@@ -1,6 +1,7 @@
 package murillo.tavares.anagram_api.adapter.in.web.mapper;
 
 import murillo.tavares.anagram_api.adapter.in.web.response.AnagramResponse;
+import murillo.tavares.anagram_api.adapter.in.web.response.AnagramSolutionResponse;
 import murillo.tavares.anagram_api.domain.model.DailyAnagram;
 import murillo.tavares.anagram_api.domain.model.DailyAnagramSolution;
 import org.mapstruct.Mapper;
@@ -15,9 +16,9 @@ public interface AnagramWebMapper {
 	@Mapping(target = "solutions", expression = "java(toSolutions(dailyAnagram))")
 	AnagramResponse toResponse(DailyAnagram dailyAnagram);
 
-	default List<String> toSolutions(DailyAnagram dailyAnagram) {
+	default List<AnagramSolutionResponse> toSolutions(DailyAnagram dailyAnagram) {
 		return dailyAnagram.solutions().stream()
-				.map(DailyAnagramSolution::formattedValue)
+				.map(solution -> new AnagramSolutionResponse(solution.formattedValue(), solution.foundBy()))
 				.toList();
 	}
 }

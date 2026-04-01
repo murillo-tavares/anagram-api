@@ -4,6 +4,6 @@ import java.util.List;
 
 public record AnagramResponse(
 		String letters,
-		List<String> solutions
+		List<AnagramSolutionResponse> solutions
 ) {
 }

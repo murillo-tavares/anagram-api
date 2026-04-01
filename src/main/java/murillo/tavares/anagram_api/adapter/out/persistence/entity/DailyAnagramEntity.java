@@ -46,7 +46,7 @@ public class DailyAnagramEntity {
 		this.letters = letters;
 	}
 
-	public void addSolution(String answer, boolean found) {
-		solutions.add(new DailyAnagramSolutionEntity(this, answer, found));
+	public void addSolution(String answer, boolean found, String foundBy) {
+		solutions.add(new DailyAnagramSolutionEntity(this, answer, found, foundBy));
 	}
 }

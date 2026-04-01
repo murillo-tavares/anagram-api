@@ -36,12 +36,12 @@ public class DailyAnagramPersistenceAdapter implements ManageDailyAnagramPort {
 	}
 
 	@Override
-	public DailyAnagram markSolutionAsFound(DailyAnagram dailyAnagram, String answer) {
+	public DailyAnagram markSolutionAsFound(DailyAnagram dailyAnagram, String answer, String foundBy) {
 		DailyAnagramSolutionEntity entity = dailyAnagramSolutionJpaRepository
 				.findByDailyAnagramPuzzleDateAndAnswer(dailyAnagram.date(), DailyAnagramSolution.normalizeAnswer(answer))
 				.orElseThrow(() -> new IllegalStateException("Stored daily anagram solution was not found"));
 
-		entity.markAsFound();
+		entity.markAsFound(foundBy);
 		return dailyAnagramPersistenceMapper.toDomain(entity.getDailyAnagram());
 	}
 }

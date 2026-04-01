@@ -33,13 +33,13 @@ public interface DailyAnagramPersistenceMapper {
 	@AfterMapping
 	default void addSolutions(DailyAnagram dailyAnagram, @MappingTarget DailyAnagramEntity entity) {
 		for (DailyAnagramSolution solution : dailyAnagram.solutions()) {
-			entity.addSolution(solution.answer(), solution.found());
+			entity.addSolution(solution.answer(), solution.found(), solution.foundBy());
 		}
 	}
 
 	default List<DailyAnagramSolution> toSolutions(DailyAnagramEntity entity) {
 		return entity.getSolutions().stream()
-				.map(solution -> new DailyAnagramSolution(solution.getAnswer(), solution.isFound()))
+				.map(solution -> new DailyAnagramSolution(solution.getAnswer(), solution.isFound(), solution.getFoundBy()))
 				.toList();
 	}
 }

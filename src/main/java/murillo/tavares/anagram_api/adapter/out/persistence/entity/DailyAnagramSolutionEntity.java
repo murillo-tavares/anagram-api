@@ -40,14 +40,23 @@ public class DailyAnagramSolutionEntity {
 	@Column(nullable = false)
 	private boolean found;
 
-	public DailyAnagramSolutionEntity(DailyAnagramEntity dailyAnagram, String answer, boolean found) {
+	@Column(name = "found_by")
+	private String foundBy;
+
+	public DailyAnagramSolutionEntity(DailyAnagramEntity dailyAnagram, String answer, boolean found, String foundBy) {
 		this.dailyAnagram = dailyAnagram;
 		this.answer = answer;
 		this.found = found;
+		this.foundBy = foundBy;
 	}
 
-	public void markAsFound() {
+	public void markAsFound(String foundBy) {
+		if (found) {
+			return;
+		}
+
 		this.found = true;
+		this.foundBy = foundBy;
 	}
 
 }

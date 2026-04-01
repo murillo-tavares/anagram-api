@@ -4,5 +4,5 @@ import murillo.tavares.anagram_api.domain.model.DailyAnagram;
 
 public interface SubmitDailyAnagramAnswerUseCase {
 
-	DailyAnagram submitAnswer(String answer);
+	DailyAnagram submitAnswer(String answer, String foundBy);
 }

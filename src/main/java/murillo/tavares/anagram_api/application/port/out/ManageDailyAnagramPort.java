@@ -11,5 +11,5 @@ public interface ManageDailyAnagramPort {
 
 	DailyAnagram save(DailyAnagram dailyAnagram);
 
-	DailyAnagram markSolutionAsFound(DailyAnagram dailyAnagram, String answer);
+	DailyAnagram markSolutionAsFound(DailyAnagram dailyAnagram, String answer, String foundBy);
 }

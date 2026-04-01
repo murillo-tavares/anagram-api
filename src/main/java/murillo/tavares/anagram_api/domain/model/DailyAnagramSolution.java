@@ -4,11 +4,13 @@ import murillo.tavares.anagram_api.common.text.TextUtils;
 
 public record DailyAnagramSolution(
 		String answer,
-		boolean found
+		boolean found,
+		String foundBy
 ) {
 
 	public DailyAnagramSolution {
 		answer = normalizeAnswer(answer);
+		foundBy = foundBy != null ? TextUtils.normalize(foundBy) : null;
 	}
 
 	public boolean matches(String value) {

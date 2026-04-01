@@ -20,8 +20,13 @@ class AnagramTest {
 	void shouldIdentifyWhenAnswerIsNewValidSolutionForDailyAnagram() {
 		DailyAnagram dailyAnagram = new DailyAnagram(
 				java.time.LocalDate.of(2026, 3, 27),
-				new Anagram("scooypyhlg", List.of("soy", "spy", "copy", "psychology")),
-				List.of("soy")
+				"scooypyhlg",
+				List.of(
+						new DailyAnagramSolution("soy", true, null),
+						new DailyAnagramSolution("spy", false, null),
+						new DailyAnagramSolution("copy", false, null),
+						new DailyAnagramSolution("psychology", false, null)
+				)
 		);
 
 		assertThat(dailyAnagram.isNewValidSolution("spy")).isTrue();
@@ -37,10 +42,10 @@ class AnagramTest {
 				java.time.LocalDate.of(2026, 3, 27),
 				"scooypyhlg",
 				List.of(
-						new DailyAnagramSolution("longer", false),
-						new DailyAnagramSolution("copy", false),
-						new DailyAnagramSolution("spy", false),
-						new DailyAnagramSolution("soy", false)
+						new DailyAnagramSolution("longer", false, null),
+						new DailyAnagramSolution("copy", false, null),
+						new DailyAnagramSolution("spy", false, null),
+						new DailyAnagramSolution("soy", false, null)
 				)
 		);
 
