@@ -13,5 +13,26 @@ spring:
       ddl-auto: validate
     open-in-view: false
 
+scalar:
+  enabled: true
+  path: /scalar
+  url: /openapi.yaml
+  hide-models: true
+  hide-search: true
+  hide-client-button: true
+  page-title: Anagram Arena API Playground
+  theme: deep-space
+  dark-mode: true
+  layout: modern
+  custom-css: |
+    :root {
+      --scalar-font: "Trebuchet MS", "Segoe UI", sans-serif;
+      --scalar-background-1: #0b1020;
+      --scalar-background-2: #121b36;
+      --scalar-color-1: #f8f5ec;
+      --scalar-color-2: #d7f3ff;
+      --scalar-sidebar-color-active: #ffd27a;
+    }
+
 freeapi-anagram-provider:
   base-url: https://anagram.freeapi.me

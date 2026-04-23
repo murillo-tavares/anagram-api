@@ -1,0 +1,264 @@
+openapi: 3.1.0
+info:
+  title: Anagram Arena API
+  version: v1
+  description: |
+    Backend for a daily anagram game with persistent puzzle state, player sessions and dual text/JSON responses.
+
+    How to play: fetch the daily board, make words with the available letters, and submit guesses to reveal hidden solutions. Log in with a player session if you want your correct answers to show your player tag.
+servers:
+  - url: /
+    description: Current game server
+tags:
+  - name: Daily Puzzle
+    description: Fetch the current daily puzzle and submit answers.
+  - name: Player
+    description: Jump into the game with a player tag, then leave whenever you want.
+paths:
+  /api/anagrams/daily:
+    get:
+      tags:
+        - Daily Puzzle
+      summary: Get daily puzzle
+      description: Returns the current daily puzzle board in text format by default. If you want structured data, the API also supports application/json.
+      responses:
+        '200':
+          description: Daily puzzle delivered.
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                plain-text-board:
+                  value: |
+                    +---------------------+
+                    | S C O O Y P Y H L G |
+                    +---------------------+
+
+                    1. soy         found by john_doe#0001
+                    2. ---
+                    3. ----
+                    4. ----------
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnagramResponse'
+              examples:
+                json-board:
+                  value:
+                    letters: scooypyhlg
+                    solutions:
+                      - value: soy
+                        foundBy: john_doe#0001
+                      - value: '---'
+                        foundBy: null
+                      - value: '----'
+                        foundBy: null
+                      - value: '----------'
+                        foundBy: null
+        '502':
+          $ref: '#/components/responses/AnagramProviderFailure'
+  /api/anagrams/daily/answers:
+    post:
+      tags:
+        - Daily Puzzle
+      summary: Submit answer
+      description: Attempts to reveal a solution and returns the board in text format by default. If you want structured data, the API also supports application/json. When the caller already has a player session, the solved word is attributed to that session's player tag.
+      requestBody:
+        required: true
+        description: Candidate answer payload.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubmitAnagramAnswerRequest'
+            examples:
+              guess:
+                value:
+                  answer: spy
+      responses:
+        '200':
+          description: Board returned after the guess. If the answer is valid and still hidden, it becomes visible.
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                plain-text-board:
+                  value: |
+                    +---------------------+
+                    | S C O O Y P Y H L G |
+                    +---------------------+
+
+                    1. soy         found by john_doe#0001
+                    2. spy         found by alex#0001
+                    3. ----
+                    4. ----------
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnagramResponse'
+              examples:
+                json-board:
+                  value:
+                    letters: scooypyhlg
+                    solutions:
+                      - value: soy
+                        foundBy: john_doe#0001
+                      - value: spy
+                        foundBy: alex#0001
+                      - value: '----'
+                        foundBy: null
+                      - value: '----------'
+                        foundBy: null
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '502':
+          $ref: '#/components/responses/AnagramProviderFailure'
+  /api/player-session:
+    post:
+      tags:
+        - Player
+      summary: Join the game
+      description: Pick a name, get a player tag like name#1234, and use it while you play this session.
+      requestBody:
+        required: true
+        description: Name you want to use in this session.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePlayerSessionRequest'
+            examples:
+              player:
+                value:
+                  name: john_doe
+      responses:
+        '200':
+          description: You are in. Your player tag is ready for this session.
+          headers:
+            Set-Cookie:
+              $ref: '#/components/headers/SessionCookie'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlayerSessionResponse'
+              examples:
+                identified:
+                  value:
+                    identified: true
+                    playerTag: john_doe#4812
+        '400':
+          $ref: '#/components/responses/ValidationError'
+    delete:
+      tags:
+        - Player
+      summary: Leave the game
+      description: Clears your current player tag and closes this play session.
+      responses:
+        '204':
+          description: Session closed.
+components:
+  headers:
+    SessionCookie:
+      description: Session cookie that should be preserved when the same client wants to keep the player identity between requests.
+      schema:
+        type: string
+        example: JSESSIONID=4F7F8A5F4D5D0A1C7D5D90E2A7D8E4BA; Path=/; HttpOnly
+  responses:
+    ValidationError:
+      description: Validation error such as a blank answer payload or invalid player name.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+    AnagramProviderFailure:
+      description: The external anagram provider failed while generating today's puzzle.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetail'
+  schemas:
+    CreatePlayerSessionRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: Player name used to build a unique tag for the current HTTP session.
+          example: john_doe
+          minLength: 3
+          maxLength: 20
+          pattern: ^[A-Za-z0-9_]+$
+    SubmitAnagramAnswerRequest:
+      type: object
+      required:
+        - answer
+      properties:
+        answer:
+          type: string
+          description: Candidate word built from the daily puzzle letters.
+          example: spy
+    AnagramResponse:
+      type: object
+      required:
+        - letters
+        - solutions
+      properties:
+        letters:
+          type: string
+          description: Normalized letters that compose the daily anagram puzzle.
+          example: scooypyhlg
+        solutions:
+          type: array
+          description: Visible solution board. Unsolved entries stay masked with dashes.
+          items:
+            $ref: '#/components/schemas/AnagramSolutionResponse'
+    AnagramSolutionResponse:
+      type: object
+      required:
+        - value
+      properties:
+        value:
+          type: string
+          description: Solved word or a masked placeholder with the same length.
+          example: spy
+        foundBy:
+          type:
+            - string
+            - 'null'
+          description: Player tag that solved the word. Null when still hidden.
+          example: john_doe#0001
+    PlayerSessionResponse:
+      type: object
+      required:
+        - identified
+      properties:
+        identified:
+          type: boolean
+          description: Whether the current HTTP session is associated with a player tag.
+          example: true
+        playerTag:
+          type:
+            - string
+            - 'null'
+          description: Player tag assigned to the session. Omitted or null for anonymous sessions.
+          example: john_doe#0001
+    ProblemDetail:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: Problem type URI.
+        title:
+          type: string
+          description: Short error title.
+        status:
+          type: integer
+          format: int32
+          description: HTTP status code.
+        detail:
+          type: string
+          description: Human-readable error detail.
+        instance:
+          type: string
+          format: uri
+          description: Request path URI.
