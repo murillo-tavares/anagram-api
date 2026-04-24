@@ -35,7 +35,7 @@ paths:
                     | S C O O Y P Y H L G |
                     +---------------------+
 
-                    1. soy         found by john_doe#0001
+                    1. soy         found by your_name#0001
                     2. ---
                     3. ----
                     4. ----------
@@ -48,7 +48,7 @@ paths:
                     letters: scooypyhlg
                     solutions:
                       - value: soy
-                        foundBy: john_doe#0001
+                        foundBy: your_name#0001
                       - value: '---'
                         foundBy: null
                       - value: '----'
@@ -73,7 +73,7 @@ paths:
             examples:
               guess:
                 value:
-                  answer: spy
+                  answer: your_guess
       responses:
         '200':
           description: Board returned after the guess. If the answer is valid and still hidden, it becomes visible.
@@ -88,8 +88,8 @@ paths:
                     | S C O O Y P Y H L G |
                     +---------------------+
 
-                    1. soy         found by john_doe#0001
-                    2. spy         found by alex#0001
+                    1. soy         found by your_name#0001
+                    2. your_guess  found by your_name#0002
                     3. ----
                     4. ----------
             application/json:
@@ -101,9 +101,9 @@ paths:
                     letters: scooypyhlg
                     solutions:
                       - value: soy
-                        foundBy: john_doe#0001
-                      - value: spy
-                        foundBy: alex#0001
+                        foundBy: your_name#0001
+                      - value: your_guess
+                        foundBy: your_name#0002
                       - value: '----'
                         foundBy: null
                       - value: '----------'
@@ -128,7 +128,7 @@ paths:
             examples:
               player:
                 value:
-                  name: john_doe
+                  name: your_name
       responses:
         '200':
           description: You are in. Your player tag is ready for this session.
@@ -143,7 +143,7 @@ paths:
                 identified:
                   value:
                     identified: true
-                    playerTag: john_doe#4812
+                    playerTag: your_name#4812
         '400':
           $ref: '#/components/responses/ValidationError'
     delete:
@@ -183,7 +183,7 @@ components:
         name:
           type: string
           description: Player name used to build a unique tag for the current HTTP session.
-          example: john_doe
+          example: your_name
           minLength: 3
           maxLength: 20
           pattern: ^[A-Za-z0-9_]+$
@@ -195,7 +195,7 @@ components:
         answer:
           type: string
           description: Candidate word built from the daily puzzle letters.
-          example: spy
+          example: your_guess
     AnagramResponse:
       type: object
       required:
@@ -219,13 +219,13 @@ components:
         value:
           type: string
           description: Solved word or a masked placeholder with the same length.
-          example: spy
+          example: your_guess
         foundBy:
           type:
             - string
             - 'null'
           description: Player tag that solved the word. Null when still hidden.
-          example: john_doe#0001
+          example: your_name#0001
     PlayerSessionResponse:
       type: object
       required:
@@ -240,7 +240,7 @@ components:
             - string
             - 'null'
           description: Player tag assigned to the session. Omitted or null for anonymous sessions.
-          example: john_doe#0001
+          example: your_name#0001
     ProblemDetail:
       type: object
       properties:
