@@ -5,7 +5,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(properties = {
 		"freeapi-anagram-provider.base-url=http://localhost",
-		"spring.datasource.url=jdbc:h2:mem:anagram-api-test;DB_CLOSE_DELAY=-1"
+		"spring.datasource.url=jdbc:h2:mem:anagram-api-test;DB_CLOSE_DELAY=-1",
+		"spring.datasource.username=sa",
+		"spring.datasource.password="
 })
 class AnagramApiApplicationTests {
 

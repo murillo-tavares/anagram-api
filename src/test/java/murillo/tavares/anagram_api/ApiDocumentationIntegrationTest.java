@@ -15,6 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(properties = {
 		"freeapi-anagram-provider.base-url=http://localhost",
 		"spring.datasource.url=jdbc:h2:mem:anagram-api-docs-test;DB_CLOSE_DELAY=-1",
+		"spring.datasource.username=sa",
+		"spring.datasource.password=",
 		"scalar.url=/openapi.yaml"
 })
 @AutoConfigureMockMvc

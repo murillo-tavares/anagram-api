@@ -1,11 +1,13 @@
+server:
+  port: ${PORT:8080}
+
 spring:
   application:
     name: anagram-api
   datasource:
-    url: jdbc:h2:file:./data/anagram-db
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/anagram}
+    username: ${SPRING_DATASOURCE_USERNAME:anagram}
+    password: ${SPRING_DATASOURCE_PASSWORD:anagram}
   flyway:
     enabled: true
   jpa:
@@ -35,4 +37,4 @@ scalar:
     }
 
 freeapi-anagram-provider:
-  base-url: https://anagram.freeapi.me
+  base-url: ${FREEAPI_ANAGRAM_PROVIDER_BASE_URL:https://anagram.freeapi.me}

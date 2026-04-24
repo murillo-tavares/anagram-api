@@ -31,12 +31,13 @@ Every player sees the same board for the day. When someone discovers a valid wor
 | **Java 21** | Modern language baseline |
 | **Spring Boot 4** | REST API foundation |
 | **Hexagonal-style architecture** | Business rules isolated from infrastructure |
-| **Spring Data JPA + H2** | Persistent daily challenge state |
+| **Spring Data JPA + PostgreSQL** | Persistent daily challenge state |
 | **Flyway** | Versioned database migrations |
 | **OpenFeign** | External anagram provider integration |
 | **MapStruct** | Explicit, low-boilerplate mapping between layers |
 | **Bean Validation** | Contract validation at the API boundary |
 | **OpenAPI + Scalar** | Documentation that also works as a live playground |
+| **Docker Compose** | Local orchestration for the API and PostgreSQL |
 | **Automated tests** | Coverage across domain, application, web, and docs |
 
 ## Getting Started
@@ -46,6 +47,13 @@ Current local entry point:
 ```text
 http://localhost:8080
 ```
+
+## Technical Docs
+
+| Document | URL |
+| --- | --- |
+| **Scalar playground** | `http://localhost:8080/scalar` |
+| **OpenAPI spec** | `http://localhost:8080/openapi.yaml` |
 
 ### Option 1: Play in Scalar
 
