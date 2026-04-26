@@ -52,15 +52,17 @@ http://localhost:8080
 
 | Document | URL |
 | --- | --- |
-| **Scalar playground** | `http://localhost:8080/scalar` |
+| **Scalar playground** | `https://anagram-api-v1l1.onrender.com/scalar` |
 | **OpenAPI spec** | `http://localhost:8080/openapi.yaml` |
 
 ### Option 1: Play in Scalar
 
+> Note: this API is hosted on a free Render plan. If the service is temporarily down it may take a short while to start again when accessed (cold-start). If you see timeouts or delays, please wait a minute and retry.
+
 Open the playground:
 
 ```text
-http://localhost:8080/scalar
+https://anagram-api-v1l1.onrender.com/scalar
 ```
 
 Quick flow:
@@ -80,13 +82,13 @@ The API also supports a terminal-friendly `text/plain` flow.
 #### 1. See the board
 
 ```bash
-curl -H "Accept: text/plain" http://localhost:8080/api/anagrams/daily
+curl -H "Accept: text/plain" https://anagram-api-v1l1.onrender.com/api/anagrams/daily
 ```
 
 #### 2. Submit a guess
 
 ```bash
-curl -X POST http://localhost:8080/api/anagrams/daily/answers \
+curl -X POST https://anagram-api-v1l1.onrender.com/api/anagrams/daily/answers \
   -H "Content-Type: application/json" \
   -H "Accept: text/plain" \
   -d '{"answer":"your_guess"}'
@@ -96,7 +98,7 @@ curl -X POST http://localhost:8080/api/anagrams/daily/answers \
 
 ```bash
 curl -c .anagram-cookie \
-  -X POST http://localhost:8080/api/player-session \
+  -X POST https://anagram-api-v1l1.onrender.com/api/player-session \
   -H "Content-Type: application/json" \
   -d '{"name":"your_name"}'
 ```
@@ -105,7 +107,7 @@ curl -c .anagram-cookie \
 
 ```bash
 curl -b .anagram-cookie -c .anagram-cookie \
-  -X POST http://localhost:8080/api/anagrams/daily/answers \
+  -X POST https://anagram-api-v1l1.onrender.com/api/anagrams/daily/answers \
   -H "Content-Type: application/json" \
   -H "Accept: text/plain" \
   -d '{"answer":"your_guess"}'
@@ -114,7 +116,7 @@ curl -b .anagram-cookie -c .anagram-cookie \
 #### 5. Leave the session
 
 ```bash
-curl -X DELETE -b .anagram-cookie http://localhost:8080/api/player-session
+curl -X DELETE -b .anagram-cookie https://anagram-api-v1l1.onrender.com/api/player-session
 ```
 
 If you are using PowerShell, prefer `curl.exe` instead of `curl`.
