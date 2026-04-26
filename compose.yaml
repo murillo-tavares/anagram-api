@@ -23,9 +23,9 @@ services:
         condition: service_healthy
     environment:
       PORT: 8080
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/anagram
-      SPRING_DATASOURCE_USERNAME: anagram
-      SPRING_DATASOURCE_PASSWORD: anagram
+      DATABASE_URL: postgres://anagram:anagram@postgres:5432/anagram
+      PGUSER: anagram
+      PGPASSWORD: anagram
       FREEAPI_ANAGRAM_PROVIDER_BASE_URL: https://anagram.freeapi.me
     ports:
       - "8080:8080"

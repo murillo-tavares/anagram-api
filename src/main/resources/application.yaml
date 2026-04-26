@@ -5,9 +5,9 @@ spring:
   application:
     name: anagram-api
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/anagram}
-    username: ${SPRING_DATASOURCE_USERNAME:anagram}
-    password: ${SPRING_DATASOURCE_PASSWORD:anagram}
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/anagram}
+    username: ${PGUSER:anagram}
+    password: ${PGPASSWORD:anagram}
   flyway:
     enabled: true
   jpa:
